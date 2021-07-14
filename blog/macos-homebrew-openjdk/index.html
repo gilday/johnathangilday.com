@@ -25,7 +25,7 @@ environment.</p>
 </li>
 <li>
 <p>Install the JDK versions you need e.g.</p>
-<div class="gatsby-highlight" data-language="sh"><pre class="language-sh"><code class="language-sh">brew cask install adoptopenjdk11</code></pre></div>
+<div class="gatsby-highlight" data-language="sh"><pre class="language-sh"><code class="language-sh">brew install --cask adoptopenjdk11</code></pre></div>
 </li>
 <li>
 <p>Configure <code class="language-text">JAVA_HOME</code> in your shell with the default version of Java. This
@@ -54,7 +54,7 @@ automatically update to reflect the changes to the <code class="language-text">J
     version=$1
     export JAVA_HOME=$(/usr/libexec/java_home -v&quot;$version&quot;);
     java -version
- }</code></pre></div>
+}</code></pre></div>
 <h3>Automatically Switching Java Versions</h3>
 <p>The command <code class="language-text">jdk 1.8</code> is succinct, but you still need to remember to type it
 when switching between a handful of different projects. To save yourself the
