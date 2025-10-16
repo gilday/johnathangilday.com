@@ -98,9 +98,14 @@ const LandingPage = ({ data }) => {
           <Section>
             <SectionText>
               <h2>
-                Automated code fixes made daily in Red Bank, NJ at{" "}
+                Secure code, delivered daily from Red Bank, NJ at{" "}
                 <a href="https://pixee.ai/">Pixee</a>.
               </h2>
+              {/* Subline under hero */}
+              <p style={{ textAlign: "center" }}>
+                Automating the hard parts of secure software so engineers can
+                focus on shipping.
+              </p>
               <UndecoratedList>
                 <li>
                   <UndecoratedAbbr title="Master of Science">
@@ -129,39 +134,12 @@ const LandingPage = ({ data }) => {
             </SectionGraphic>
             <SectionText>
               <h2>Specializing in</h2>
+              {/* Minimal, punchy single-line specialization */}
               <ul>
-                <li>Java Agent Development</li>
-                <li>
-                  JVM based services{" "}
-                  <small>
-                    (Spring, Jersey, OK HTTP, Jackson, Guice, Scala, Akka)
-                  </small>
+                <li style={{ textAlign: "center", listStyle: "none" }}>
+                  Secure software architecture · Developer tooling · JVM
+                  performance · CI/CD automation · Technical leadership
                 </li>
-                <li>
-                  Enterprise Java{" "}
-                  <small>
-                    (JAX-RS, JPA, JDBC, JAX-WS, JAXP, JAXB, Servlets, OSGi)
-                  </small>
-                </li>
-                <li>
-                  Data Persistence Technologies{" "}
-                  <small>(Berkeley DB, MongoDB, RDBMS)</small>
-                </li>
-                <li>
-                  Automation{" "}
-                  <small>
-                    (Gradle, Maven, Bash, git, CI/CD, JUnit Jupiter, Vagrant,
-                    Packer)
-                  </small>
-                </li>
-                <li>
-                  Web{" "}
-                  <small>(Angular, webpack, Gatsby, Bootstrap, Jasemine)</small>
-                </li>
-                <li>
-                  Cloud <small>(AWS, OpenStack, Docker)</small>
-                </li>
-                <li>Android mobile apps</li>
               </ul>
             </SectionText>
           </Section>
