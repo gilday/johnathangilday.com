@@ -93,6 +93,5 @@ module.exports = {
         postCssPlugins: [require(`postcss-custom-media`)({ stage: 0 })],
       },
     },
-    `gatsby-plugin-react-helmet`,
   ],
 }

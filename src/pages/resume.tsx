@@ -16,7 +16,7 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
+      sort: { frontmatter: { date: DESC } }
       filter: { fileAbsolutePath: { regex: "/resume/" } }
     ) {
       edges {
