@@ -1,5 +1,5 @@
 ---
-era: "2017 - 2021"
+era: "2017 - Now"
 date: "2017-03"
 title: Contrast Security
 ---
