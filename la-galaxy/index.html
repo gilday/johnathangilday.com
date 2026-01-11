@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Bank LA Galaxy</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: #00245D;
+            margin: -16px -16px 20px -16px;
+            padding: 20px 16px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #FFD200;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 12px 20px;
+            min-height: 44px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            touch-action: manipulation;
+        }
+
+        #start-all {
+            background: #FFD200;
+            color: #00245D;
+        }
+
+        #stop-all {
+            background: #ef4444;
+            color: white;
+        }
+
+        #new-game {
+            background: #0065A4;
+            color: white;
+        }
+
+        #reset-all {
+            background: #6b7280;
+            color: white;
+        }
+
+        .player-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .player-table th {
+            background: #00245D;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .player-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e5e5e5;
+            vertical-align: middle;
+        }
+
+        .player-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .player-table tbody tr.on-bench {
+            background: #f0f0f0;
+            color: #888;
+        }
+
+        .player-table tbody tr.running {
+            background: #fef9e7;
+        }
+
+        .position-select {
+            font-size: 1rem;
+            padding: 8px;
+            min-height: 44px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            width: 100%;
+            max-width: 120px;
+        }
+
+        .time-display {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 1.125rem;
+            font-weight: 600;
+            min-width: 60px;
+        }
+
+        .timer-toggle {
+            background: #0065A4;
+            color: white;
+            padding: 10px 16px;
+        }
+
+        .timer-toggle.running {
+            background: #FFD200;
+            color: #00245D;
+        }
+
+        .timer-toggle:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0a1628;
+                color: #e5e5e5;
+            }
+
+            header {
+                background: #00245D;
+            }
+
+            .player-table {
+                background: #1a2a3a;
+            }
+
+            .player-table td {
+                border-bottom-color: #2a3a4a;
+            }
+
+            .player-table tbody tr.on-bench {
+                background: #0f1a28;
+                color: #666;
+            }
+
+            .player-table tbody tr.running {
+                background: #2a3520;
+            }
+
+            .position-select {
+                background: #1a2a3a;
+                color: #e5e5e5;
+                border-color: #3a4a5a;
+            }
+
+            .modal {
+                background: rgba(0,0,0,0.9);
+            }
+
+            .modal-content {
+                background: #1a2a3a;
+            }
+        }
+
+        /* Make time clickable */
+        .time-display {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 300px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            margin: 0 0 16px 0;
+            font-size: 1.25rem;
+        }
+
+        .modal-content .position-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-content .position-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-content .close-btn {
+            margin-top: 16px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Red Bank LA Galaxy</h1>
+    </header>
+
+    <section class="controls">
+        <button id="start-all">Start All</button>
+        <button id="stop-all">Stop All</button>
+        <button id="new-game">New Game</button>
+        <button id="reset-all">Reset All</button>
+    </section>
+
+    <table class="player-table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Position</th>
+                <th>Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-player-id="1">
+                <td>Jackson</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="2">
+                <td>Charlotte</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="3">
+                <td>John</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="4">
+                <td>Adam</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="5">
+                <td>Owen</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="6">
+                <td>Iker</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="7">
+                <td>Luke</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="8">
+                <td>Jonah</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+            <tr data-player-id="9">
+                <td>Gianni</td>
+                <td>
+                    <select class="position-select">
+                        <option value="bench">Bench</option>
+                        <option value="gk">GK</option>
+                        <option value="defender">Defender</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </td>
+                <td class="time-display">00:00</td>
+                <td><button class="timer-toggle">Start</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Position Time Modal -->
+    <div id="position-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-player-name">Player</h2>
+            <div class="position-row">
+                <span>GK</span>
+                <span id="modal-time-gk">00:00</span>
+            </div>
+            <div class="position-row">
+                <span>Defender</span>
+                <span id="modal-time-defender">00:00</span>
+            </div>
+            <div class="position-row">
+                <span>Forward</span>
+                <span id="modal-time-forward">00:00</span>
+            </div>
+            <div class="position-row" style="font-weight: bold; border-top: 2px solid #333;">
+                <span>Total</span>
+                <span id="modal-time-total">00:00</span>
+            </div>
+            <button class="close-btn" id="close-modal">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'la-galaxy-team-timer';
+
+        // Default position time tracking
+        function defaultPositionTime() {
+            return { gk: 0, defender: 0, forward: 0 };
+        }
+
+        // Player state (default values, will be overwritten by loadState)
+        const players = [
+            { id: 1, firstName: 'Jackson', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 2, firstName: 'Charlotte', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 3, firstName: 'John', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 4, firstName: 'Adam', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 5, firstName: 'Owen', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 6, firstName: 'Iker', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 7, firstName: 'Luke', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 8, firstName: 'Jonah', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+            { id: 9, firstName: 'Gianni', position: 'bench', elapsedMs: 0, timerStart: null, positionTime: defaultPositionTime() },
+        ];
+
+        // Save state to localStorage
+        function saveState() {
+            try {
+                const state = players.map(p => ({
+                    id: p.id,
+                    position: p.position,
+                    elapsedMs: p.elapsedMs,
+                    timerStart: p.timerStart,
+                    positionTime: p.positionTime
+                }));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn('Failed to save state:', e);
+            }
+        }
+
+        // Load state from localStorage
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (!saved) return;
+
+                const state = JSON.parse(saved);
+                state.forEach(savedPlayer => {
+                    const player = players.find(p => p.id === savedPlayer.id);
+                    if (player) {
+                        player.position = savedPlayer.position;
+                        player.elapsedMs = savedPlayer.elapsedMs;
+                        player.timerStart = savedPlayer.timerStart;
+                        player.positionTime = savedPlayer.positionTime || defaultPositionTime();
+                    }
+                });
+            } catch (e) {
+                console.warn('Failed to load state:', e);
+            }
+        }
+
+        // Format milliseconds as MM:SS
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Get current elapsed time for a player (including running time)
+        function getCurrentElapsed(player) {
+            if (player.timerStart) {
+                return player.elapsedMs + (Date.now() - player.timerStart);
+            }
+            return player.elapsedMs;
+        }
+
+        // Update the display for a single player row
+        function updatePlayerRow(player) {
+            const row = document.querySelector(`tr[data-player-id="${player.id}"]`);
+            if (!row) return;
+
+            const timeDisplay = row.querySelector('.time-display');
+            const toggleBtn = row.querySelector('.timer-toggle');
+            const positionSelect = row.querySelector('.position-select');
+
+            // Update time display
+            timeDisplay.textContent = formatTime(getCurrentElapsed(player));
+
+            // Update row classes
+            row.classList.toggle('on-bench', player.position === 'bench');
+            row.classList.toggle('running', player.timerStart !== null);
+
+            // Update button state
+            const isRunning = player.timerStart !== null;
+            toggleBtn.textContent = isRunning ? 'Stop' : 'Start';
+            toggleBtn.classList.toggle('running', isRunning);
+            toggleBtn.disabled = player.position === 'bench';
+
+            // Sync position select
+            positionSelect.value = player.position;
+        }
+
+        // Update all player rows
+        function updateAllRows() {
+            players.forEach(updatePlayerRow);
+        }
+
+        // Start timer for a player
+        function startTimer(player) {
+            if (player.position === 'bench' || player.timerStart !== null) return;
+            player.timerStart = Date.now();
+            updatePlayerRow(player);
+            saveState();
+        }
+
+        // Stop timer for a player and attribute time to current position
+        function stopTimer(player) {
+            if (player.timerStart === null) return;
+            const elapsed = Date.now() - player.timerStart;
+            player.elapsedMs += elapsed;
+            // Attribute time to current position
+            if (player.position !== 'bench' && player.positionTime[player.position] !== undefined) {
+                player.positionTime[player.position] += elapsed;
+            }
+            player.timerStart = null;
+            updatePlayerRow(player);
+            saveState();
+        }
+
+        // Toggle timer for a player
+        function toggleTimer(player) {
+            if (player.timerStart !== null) {
+                stopTimer(player);
+            } else {
+                startTimer(player);
+            }
+        }
+
+        // Change player position
+        function setPosition(player, newPosition) {
+            const wasRunning = player.timerStart !== null;
+            // Stop timer to attribute time to old position
+            if (wasRunning) {
+                stopTimer(player);
+            }
+            player.position = newPosition;
+            // Restart timer if was running and not going to bench
+            if (wasRunning && newPosition !== 'bench') {
+                startTimer(player);
+            }
+            updatePlayerRow(player);
+            saveState();
+        }
+
+        // Start All - start timers for all non-bench players
+        function startAll() {
+            players.forEach(player => {
+                if (player.position !== 'bench') {
+                    startTimer(player);
+                }
+            });
+        }
+
+        // Stop All - stop all running timers
+        function stopAll() {
+            players.forEach(player => stopTimer(player));
+        }
+
+        // New Game - reset all timers but keep positions
+        function newGame() {
+            if (!confirm('Start a new game? This will reset all session timers.')) return;
+            players.forEach(player => {
+                if (player.timerStart !== null) {
+                    player.timerStart = null;
+                }
+                player.elapsedMs = 0;
+            });
+            updateAllRows();
+            saveState();
+        }
+
+        // Reset All - clear all data completely
+        function resetAll() {
+            if (!confirm('Reset ALL data? This will clear all times, positions, and stats. This cannot be undone!')) return;
+            players.forEach(player => {
+                player.timerStart = null;
+                player.elapsedMs = 0;
+                player.position = 'bench';
+                player.positionTime = defaultPositionTime();
+            });
+            updateAllRows();
+            saveState();
+        }
+
+        // Show position time modal for a player
+        function showPositionModal(player) {
+            const modal = document.getElementById('position-modal');
+            document.getElementById('modal-player-name').textContent = player.firstName;
+            document.getElementById('modal-time-gk').textContent = formatTime(player.positionTime.gk);
+            document.getElementById('modal-time-defender').textContent = formatTime(player.positionTime.defender);
+            document.getElementById('modal-time-forward').textContent = formatTime(player.positionTime.forward);
+            const total = player.positionTime.gk + player.positionTime.defender + player.positionTime.forward;
+            document.getElementById('modal-time-total').textContent = formatTime(total);
+            modal.classList.add('visible');
+        }
+
+        // Hide modal
+        function hideModal() {
+            document.getElementById('position-modal').classList.remove('visible');
+        }
+
+        // Set up event listeners
+        function init() {
+            // Load saved state
+            loadState();
+
+            // Global controls
+            document.getElementById('start-all').addEventListener('click', startAll);
+            document.getElementById('stop-all').addEventListener('click', stopAll);
+            document.getElementById('new-game').addEventListener('click', newGame);
+            document.getElementById('reset-all').addEventListener('click', resetAll);
+
+            // Modal controls
+            document.getElementById('close-modal').addEventListener('click', hideModal);
+            document.getElementById('position-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'position-modal') hideModal();
+            });
+
+            // Per-player controls
+            players.forEach(player => {
+                const row = document.querySelector(`tr[data-player-id="${player.id}"]`);
+                if (!row) return;
+
+                const toggleBtn = row.querySelector('.timer-toggle');
+                const positionSelect = row.querySelector('.position-select');
+                const timeDisplay = row.querySelector('.time-display');
+
+                toggleBtn.addEventListener('click', () => toggleTimer(player));
+                positionSelect.addEventListener('change', (e) => setPosition(player, e.target.value));
+                timeDisplay.addEventListener('click', () => showPositionModal(player));
+            });
+
+            // Update display every second
+            setInterval(updateAllRows, 1000);
+
+            // Initial render
+            updateAllRows();
+        }
+
+        // Start when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
