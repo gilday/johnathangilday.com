@@ -1,0 +1,75 @@
+---
+import BaseHead from "../components/BaseHead.astro"
+import { siteConfig } from "../data/site"
+import "../styles/blog.css"
+
+interface Props {
+  title: string
+  description?: string
+  isIndex?: boolean
+  type?: "website" | "article"
+  publishedTime?: Date
+}
+
+const { title, description, isIndex = false, type, publishedTime } =
+  Astro.props
+const blogTitle = siteConfig.blogTitle
+const author = siteConfig.author.name
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      type={type}
+      publishedTime={publishedTime}
+      author={type === "article" ? author : undefined}
+    />
+  </head>
+  <body>
+    <div class="blog-container">
+      <header>
+        {
+          isIndex ? (
+            <h1 class="blog-title-large">{blogTitle}</h1>
+          ) : (
+            <h2 class="blog-title-small">
+              <a href="/blog/">{blogTitle}</a>
+            </h2>
+          )
+        }
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer>
+        &copy; {new Date().getFullYear()}, {author}
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .blog-container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 42.72rem;
+    padding: 2.67rem 1.335rem;
+  }
+
+  .blog-title-large {
+    font-size: 2.83rem;
+    line-height: 3.56rem; /* 2 rhythm units */
+    letter-spacing: -2px;
+    margin-bottom: 2.67rem;
+    margin-top: 0;
+  }
+
+  .blog-title-small {
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.32rem; /* match former h3 size to preserve visual appearance */
+    margin-top: 0;
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+import { getCollection, render } from "astro:content"
+import BlogLayout from "../../layouts/BlogLayout.astro"
+import Bio from "../../components/Bio.astro"
+import { getSlug } from "../../utils/slug"
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  )
+  return posts.map((post, index) => {
+    const prev = index < posts.length - 1 ? posts[index + 1] : null
+    const next = index > 0 ? posts[index - 1] : null
+    return {
+      params: { slug: getSlug(post.id) },
+      props: { post, prev, next },
+    }
+  })
+}
+
+const { post, prev, next } = Astro.props
+const { Content } = await render(post)
+const formattedDate = post.data.date.toLocaleDateString("en-US", {
+  timeZone: "UTC",
+  year: "numeric",
+  month: "long",
+  day: "2-digit",
+})
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  publishedTime={post.data.date}
+>
+  <article>
+    <header>
+      <h1 class="post-title">{post.data.title}</h1>
+      <p class="post-date">{formattedDate}</p>
+    </header>
+    <section class="post-content">
+      <Content />
+    </section>
+    <hr />
+    <footer>
+      <Bio />
+    </footer>
+  </article>
+
+  <nav>
+    <ul class="post-nav">
+      <li>
+        {
+          prev && (
+            <a href={`/blog/${getSlug(prev.id)}/`} rel="prev">
+              &larr; {prev.data.title}
+            </a>
+          )
+        }
+      </li>
+      <li>
+        {
+          next && (
+            <a href={`/blog/${getSlug(next.id)}/`} rel="next">
+              {next.data.title} &rarr;
+            </a>
+          )
+        }
+      </li>
+    </ul>
+  </nav>
+</BlogLayout>
+
+<style>
+  .post-title {
+    margin-top: 1.75rem;
+    margin-bottom: 0;
+  }
+
+  .post-date {
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 1.75rem;
+  }
+
+  hr {
+    margin-bottom: 1.75rem;
+  }
+
+  .post-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+  }
+</style>

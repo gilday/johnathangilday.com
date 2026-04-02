@@ -54,9 +54,14 @@ typings/
 # dotenv environment variable files
 .env*
 
-# gatsby files
-.cache/
-public
+# Astro
+dist/
+.astro/
+
+# Claude Code - machine-local files
+.claude/settings.local.json
+.claude/projects/
+.claude/plugin-*.local.md
 
 # Mac files
 .DS_Store

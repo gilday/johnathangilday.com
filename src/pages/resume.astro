@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from "astro:content"
+import ResumeLayout from "../layouts/ResumeLayout.astro"
+import Resume from "../components/resume/Resume.astro"
+import Timeline from "../components/resume/Timeline.astro"
+import Era from "../components/resume/Era.astro"
+import Event from "../components/resume/Event.astro"
+
+const entries = (await getCollection("resume")).sort((a, b) => {
+  if (b.data.date > a.data.date) return 1
+  if (b.data.date < a.data.date) return -1
+  return 0
+})
+
+// Group by era, preserving insertion order
+const entriesByEra: Record<
+  string,
+  { date: string; title: string; entry: (typeof entries)[0] }[]
+> = {}
+for (const entry of entries) {
+  const era = entry.data.era
+  if (!entriesByEra[era]) {
+    entriesByEra[era] = []
+  }
+  entriesByEra[era].push({
+    date: entry.data.date,
+    title: entry.data.title,
+    entry,
+  })
+}
+
+// Resolve all async content rendering in frontmatter
+const renderedEntriesByEra = await Promise.all(
+  Object.entries(entriesByEra).map(async ([era, events]) => ({
+    era,
+    events: await Promise.all(
+      events.map(async e => ({
+        ...e,
+        Content: (await render(e.entry)).Content,
+      }))
+    ),
+  }))
+)
+---
+
+<ResumeLayout title="Resume">
+  <Resume timeline={{}}>
+    <Timeline>
+      {
+        renderedEntriesByEra.map(({ era, events }) => (
+          <Era title={era}>
+            {events.map(event => (
+              <Event title={event.title}>
+                <event.Content />
+              </Event>
+            ))}
+          </Era>
+        ))
+      }
+    </Timeline>
+  </Resume>
+</ResumeLayout>

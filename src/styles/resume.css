@@ -1,0 +1,94 @@
+/*
+ * Resume typography
+ * Extracted from Typography.js config: Helvetica, 14px base
+ * rhythm(1) = 1.5rem (at 14px base)
+ */
+
+:root {
+  --gray-darker: #d5d5d5;
+  --gray-dark: #333;
+  --gray-light: #999;
+  --gray-lighter: #eee;
+  --white: #fff;
+}
+
+html {
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: hsla(0, 0%, 0%, 0.8);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  font-kerning: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+  line-height: 40px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+p {
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+a {
+  color: #1ca086;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0 0 1.5rem 1.5rem;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 0.75rem;
+}
+
+img {
+  max-width: 100%;
+}
+
+iframe {
+  max-width: 100%;
+  margin-bottom: 1.07rem;
+}

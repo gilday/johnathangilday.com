@@ -1,0 +1,95 @@
+---
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<article class="event">
+  <span class="arrow"></span>
+  <div class="event-header">
+    <h3 class="event-title">{title}</h3>
+  </div>
+  <div class="event-body">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .event {
+    background-color: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: 2px;
+    word-wrap: break-word;
+    margin: 40px 8px;
+  }
+
+  @media (min-width: 960px) {
+    .event {
+      margin: 40px 0;
+      width: 458px;
+      float: left;
+    }
+
+    .event:nth-child(even) {
+      clear: left;
+    }
+
+    .event:nth-child(odd) {
+      float: right;
+    }
+  }
+
+  .arrow {
+    background-repeat: no-repeat;
+    display: block;
+    height: 20px;
+    width: 10px;
+    position: absolute;
+    z-index: 2;
+    margin-top: 40px;
+  }
+
+  @media (min-width: 960px) {
+    .event:nth-child(odd) .arrow {
+      margin-left: -10px;
+      background-image: url("/img/leftarrow.png");
+    }
+
+    .event:nth-child(even) .arrow {
+      margin-left: 456px;
+      background-image: url("/img/rightarrow.png");
+    }
+  }
+
+  .event-header {
+    background-color: var(--gray-lighter);
+    border-bottom: 1px solid var(--gray-darker);
+    margin: 0 0 4px 0;
+  }
+
+  .event-title {
+    font-size: 1.1em;
+    color: var(--gray-dark);
+    padding: 0 0.5em;
+    margin: 0;
+  }
+
+  .event-body {
+    text-align: justify;
+    padding: 0 8px;
+  }
+
+  .event-body :global(img) {
+    border-radius: 2px;
+    display: block;
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+  }
+
+  .event-body :global(iframe) {
+    border-radius: 2px;
+  }
+</style>

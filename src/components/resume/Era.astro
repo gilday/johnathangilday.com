@@ -1,0 +1,29 @@
+---
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<section class="era">
+  <h2 class="era-title">{title}</h2>
+  <slot />
+</section>
+
+<style>
+  .era::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .era-title {
+    background-color: var(--gray-light);
+    text-align: center;
+    width: 180px;
+    border-radius: 4px;
+    clear: both;
+    margin: 1rem auto;
+  }
+</style>

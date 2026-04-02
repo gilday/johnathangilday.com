@@ -1,0 +1,38 @@
+---
+import { Image } from "astro:assets"
+import { siteConfig } from "../data/site"
+import profilePic from "../assets/profile-pic.jpg"
+
+const { author } = siteConfig
+---
+
+<div class="bio">
+  <Image
+    src={profilePic}
+    alt={author.name}
+    width={50}
+    height={50}
+    class="bio-avatar"
+  />
+  <p>
+    Written by <strong><a href="/">{author.name}</a></strong>. {author.summary}
+  </p>
+</div>
+
+<style>
+  .bio {
+    display: flex;
+    margin-bottom: 4.45rem; /* ~2.5 rhythms */
+  }
+
+  .bio a {
+    box-shadow: none;
+  }
+
+  .bio-avatar {
+    margin-right: 0.875rem;
+    margin-bottom: 0;
+    min-width: 50px;
+    border-radius: 100%;
+  }
+</style>

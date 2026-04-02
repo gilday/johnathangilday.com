@@ -1,0 +1,196 @@
+---
+import LandingLayout from "../layouts/LandingLayout.astro"
+import Container from "../components/Container.astro"
+import GitHub from "../components/icons/GitHub.astro"
+import LinkedIn from "../components/icons/LinkedIn.astro"
+import StackOverflow from "../components/icons/StackOverflow.astro"
+import Envelope from "../components/icons/Envelope.astro"
+import { siteConfig } from "../data/site"
+---
+
+<LandingLayout title="JohnathanGilday.com">
+  <style>
+    body {
+      /** Photo by Resource Boy on Unsplash */
+      background: repeat url("/img/chalk.jpg");
+    }
+  </style>
+  <Container width="960px">
+    <header class="landing-header">
+      <h1>
+        {siteConfig.title}
+        <span class="subtitle">Software Developer</span>
+      </h1>
+      <ul class="flex-list">
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/resume/">Resume</a></li>
+      </ul>
+    </header>
+    <main>
+      <div class="section">
+        <div class="section-text">
+          <h2>
+            Secure code, delivered daily from Red Bank, NJ at{" "}
+            <a href="https://pixee.ai/">Pixee</a>.
+          </h2>
+          <p style="text-align: center">
+            Automating the hard parts of secure software so engineers can focus
+            on shipping.
+          </p>
+          <ul class="undecorated-list">
+            <li>
+              <abbr title="Master of Science">M.S.</abbr>{" "}
+              Computer Science, Johns Hopkins University
+            </li>
+            <li>
+              <abbr title="Bachelor of Science">B.S.</abbr>{" "}
+              Computer Science, Rutgers University
+            </li>
+          </ul>
+        </div>
+        <div class="section-graphic">
+          <img src="/img/baltimore-chalk.png" alt="Baltimore" />
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-graphic">
+          <img
+            src="/img/java-chalk.png"
+            alt="Specializing in JVM technologies"
+          />
+        </div>
+        <div class="section-text">
+          <h2>Specializing in</h2>
+          <ul>
+            <li style="text-align: center; list-style: none">
+              Secure software architecture &middot; Developer tooling &middot;
+              JVM performance &middot; CI/CD automation &middot; Technical
+              leadership
+            </li>
+          </ul>
+        </div>
+      </div>
+      <footer>
+        <ul class="flex-list">
+          <li>
+            <a
+              href={`https://github.com/${siteConfig.social.github}`}
+              aria-label="GitHub"
+              class="social-link"
+            >
+              <GitHub />
+            </a>
+          </li>
+          <li>
+            <a
+              href={`https://linkedin.com/in/${siteConfig.social.linkedIn}`}
+              aria-label="LinkedIn"
+              class="social-link"
+            >
+              <LinkedIn />
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://stackoverflow.com/users/501368/jdgilday/"
+              aria-label="Stack Overflow"
+              class="social-link"
+            >
+              <StackOverflow />
+            </a>
+          </li>
+          <li>
+            <a
+              href={`mailto:${siteConfig.social.email}`}
+              aria-label="E-Mail"
+              class="social-link"
+            >
+              <Envelope />
+            </a>
+          </li>
+        </ul>
+      </footer>
+    </main>
+  </Container>
+</LandingLayout>
+
+<style>
+  .landing-header {
+    margin-top: 1.95rem;
+    margin-bottom: 1.95rem;
+  }
+
+  .subtitle {
+    display: block;
+    font-size: 1.25rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .flex-list {
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0;
+  }
+
+  @media (min-width: 960px) {
+    .section {
+      flex-direction: row;
+    }
+  }
+
+  .section > div {
+    flex: 1;
+  }
+
+  .section-text {
+    margin-top: 24px;
+  }
+
+  .section-graphic {
+    display: none;
+  }
+
+  @media (min-width: 960px) {
+    .section-graphic {
+      display: flex;
+      justify-content: center;
+    }
+
+    .section-graphic > :global(img) {
+      height: 280px;
+    }
+  }
+
+  .undecorated-list {
+    list-style: none;
+  }
+
+  abbr {
+    text-decoration: none;
+    border: none;
+  }
+
+  .social-link {
+    box-shadow: none;
+  }
+
+  .social-link :global(svg) {
+    height: 4rem;
+    width: 4rem;
+  }
+
+  .social-link :global(svg > path) {
+    stroke: rgba(220, 220, 220, 0.8);
+  }
+
+  .social-link:hover :global(svg > path) {
+    fill: rgba(220, 220, 220, 0.8);
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content"
+import BlogLayout from "../../layouts/BlogLayout.astro"
+import Bio from "../../components/Bio.astro"
+import { getSlug } from "../../utils/slug"
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+)
+---
+
+<BlogLayout title="All posts" isIndex={true}>
+  <Bio />
+  {
+    posts.map((post) => {
+      const slug = getSlug(post.id)
+      const formattedDate = post.data.date.toLocaleDateString("en-US", {
+        timeZone: "UTC",
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+      })
+      return (
+        <article>
+          <header>
+            <h2 class="post-title">
+              <a href={`/blog/${slug}/`}>{post.data.title}</a>
+            </h2>
+            <small>{formattedDate}</small>
+          </header>
+          <section>
+            <p>{post.data.description}</p>
+          </section>
+        </article>
+      )
+    })
+  }
+</BlogLayout>
+
+<style>
+  .post-title {
+    font-size: 1.32rem; /* match former h3 size to preserve visual appearance */
+    margin-top: 3.56rem; /* 2 rhythms */
+    margin-bottom: 0.4375rem;
+  }
+
+  .post-title a {
+    box-shadow: none;
+  }
+</style>

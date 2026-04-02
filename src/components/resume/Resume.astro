@@ -1,0 +1,40 @@
+---
+import Container from "../Container.astro"
+
+interface Props {
+  timeline: Record<string, { date: string; title: string; html: string }[]>
+}
+
+const { timeline } = Astro.props
+---
+
+<Container width="960px">
+  <header class="resume-header">
+    <h1>
+      <a href="/">Johnathan Gilday</a>
+      <span class="subtitle">
+        Principal Software Developer at Pixee
+      </span>
+    </h1>
+    <p>
+      <a href="mailto:me@johnathangilday.com">me@johnathangilday.com</a>
+    </p>
+    <p>
+      <a href="/johnathan-gilday-resume.pdf">PDF resume</a>
+    </p>
+  </header>
+  <slot />
+</Container>
+
+<style>
+  .resume-header {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .subtitle {
+    display: block;
+    font-size: 1.05rem;
+    margin: 0 0 1.5rem;
+  }
+</style>
