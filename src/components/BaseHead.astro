@@ -7,12 +7,13 @@ interface Props {
   type?: "website" | "article"
   publishedTime?: Date
   author?: string
+  standalone?: boolean
 }
 
-const { title, description, type = "website", publishedTime, author } =
+const { title, description, type = "website", publishedTime, author, standalone } =
   Astro.props
 const metaDescription = description || siteConfig.description
-const pageTitle = `${title} | ${siteConfig.title}`
+const pageTitle = standalone ? title : `${title} | ${siteConfig.title}`
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
 const ogImage = new URL("/img/profile-pic.jpg", Astro.site).href
 ---
@@ -46,6 +47,24 @@ const ogImage = new URL("/img/profile-pic.jpg", Astro.site).href
 <meta name="twitter:image" content={ogImage} />
 <link rel="canonical" href={canonicalUrl} />
 <link rel="icon" href="/favicon.ico" />
+
+<!-- Structured data: Person schema helps search engines associate "John Gilday" with "Johnathan Gilday" -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.author.name,
+    alternateName: siteConfig.author.altName,
+    givenName: "John",
+    familyName: "Gilday",
+    url: siteConfig.siteUrl,
+    sameAs: [
+      `https://github.com/${siteConfig.social.github}`,
+      `https://www.linkedin.com/in/${siteConfig.social.linkedIn}/`,
+    ],
+  })}
+/>
 
 <!-- Google Analytics -->
 <script

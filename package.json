@@ -8,6 +8,7 @@
     "url": "https://github.com/gilday/johnathangilday.com/issues"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@fontsource/merriweather": "^5.0.0",
     "astro": "^5.0.0",
     "remark-smartypants": "^3.0.0",

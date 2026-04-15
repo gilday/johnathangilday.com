@@ -15,6 +15,7 @@ const { title, description, isIndex = false, type, publishedTime } =
   Astro.props
 const blogTitle = siteConfig.blogTitle
 const author = siteConfig.author.name
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
 ---
 
 <!doctype html>
@@ -27,6 +28,31 @@ const author = siteConfig.author.name
       publishedTime={publishedTime}
       author={type === "article" ? author : undefined}
     />
+    {
+      type === "article" && publishedTime && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: title,
+            description: description,
+            url: canonicalUrl,
+            datePublished: publishedTime.toISOString(),
+            author: {
+              "@type": "Person",
+              name: siteConfig.author.name,
+              url: siteConfig.siteUrl,
+            },
+            publisher: {
+              "@type": "Person",
+              name: siteConfig.author.name,
+              url: siteConfig.siteUrl,
+            },
+          })}
+        />
+      )
+    }
   </head>
   <body>
     <div class="blog-container">

@@ -1,7 +1,9 @@
 import { defineConfig } from "astro/config"
 import remarkSmartypants from "remark-smartypants"
+import sitemap from "@astrojs/sitemap"
 
 export default defineConfig({
+  integrations: [sitemap()],
   site: "https://johnathangilday.com",
   output: "static",
   trailingSlash: "always",
