@@ -14,6 +14,9 @@ const { title, description } = Astro.props
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} standalone />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="/img/chalk.webp" />
     <link
       href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap"
       rel="stylesheet"
