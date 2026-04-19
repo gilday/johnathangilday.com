@@ -62,6 +62,9 @@ dist/
 .claude/settings.local.json
 .claude/projects/
 .claude/plugin-*.local.md
+.agents/
+.playwright-mcp/
+screenshots/
 
 # Mac files
 .DS_Store

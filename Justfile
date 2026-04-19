@@ -12,5 +12,8 @@ preview:
 format:
     npm run format
 
+screenshot *args:
+    node scripts/screenshot.mjs {{args}}
+
 deploy:
     npm run deploy
