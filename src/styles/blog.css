@@ -99,6 +99,19 @@ blockquote {
   line-height: 1.78;
 }
 
+aside {
+  margin: 0 0 1.78rem;
+  padding: 0.45rem 0 0.45rem 1.42rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: hsla(0, 0%, 0%, 0.7);
+  border-left: 0.15rem solid hsla(0, 0%, 0%, 0.25);
+}
+
+aside > :last-child {
+  margin-bottom: 0;
+}
+
 ul,
 ol {
   margin: 0 0 1.78rem 1.78rem;
