@@ -47,7 +47,6 @@ const ogImage = new URL("/img/profile-pic.jpg", Astro.site).href
 <meta name="twitter:image" content={ogImage} />
 <link rel="canonical" href={canonicalUrl} />
 <link rel="icon" href="/favicon.ico" />
-<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
 <!-- Structured data: Person schema helps search engines associate "John Gilday" with "Johnathan Gilday" -->
 <script
@@ -66,19 +65,3 @@ const ogImage = new URL("/img/profile-pic.jpg", Astro.site).href
     ],
   })}
 />
-
-<!-- Google Analytics -->
-<script
-  is:inline
-  async
-  src="https://www.googletagmanager.com/gtag/js?id=G-E3KXE45ML7"></script>
-<script is:inline>
-  window.dataLayer = window.dataLayer || []
-  function gtag() {
-    dataLayer.push(arguments)
-  }
-  gtag("js", new Date())
-  gtag("config", "G-E3KXE45ML7", {
-    anonymize_ip: true,
-  })
-</script>
