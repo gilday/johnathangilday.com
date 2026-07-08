@@ -14,12 +14,29 @@ const pages = Object.fromEntries(posts.map((post) => [getSlug(post.id), post]))
 const ACCENT: [number, number, number] = [6, 255, 104]
 const TEXT: [number, number, number] = [255, 255, 255]
 
+/**
+ * Some post titles lead with a decorative emoji (e.g. "🔒 XML External Entity…").
+ * canvaskit has no emoji font loaded, so it drops the glyph but keeps the
+ * trailing space, leaving the card title visibly indented. Strip any leading
+ * run of pictographic characters, emoji modifiers, and the whitespace that
+ * follows so the rendered title starts flush. The full title (emoji and all)
+ * is kept for og:image:alt over in BaseHead.astro.
+ *
+ * Char class: any Extended_Pictographic glyph, U+FE0F (variation selector-16),
+ * U+200D (zero-width joiner in emoji sequences), and any whitespace.
+ */
+function cardTitle(title: string): string {
+  return title
+    .replace(/^[\p{Extended_Pictographic}\u{FE0F}\u{200D}\s]+/u, "")
+    .trimStart()
+}
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   pages,
   // The map key is already the post slug; use it verbatim as the route param.
   getSlug: (path) => path,
   getImageOptions: (_path, post) => ({
-    title: post.data.title,
+    title: cardTitle(post.data.title),
     // Card sub-text: author + domain (the SEO og:description is set separately
     // in BaseHead.astro). Middle dot instead of an em dash by house style.
     description: "Johnathan Gilday · johnathangilday.com",
