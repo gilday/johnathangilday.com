@@ -10,9 +10,11 @@ interface Props {
   isIndex?: boolean
   type?: "website" | "article"
   publishedTime?: Date
+  /** Absolute URL to the post's generated Open Graph title card. */
+  image?: string
 }
 
-const { title, description, isIndex = false, type, publishedTime } =
+const { title, description, isIndex = false, type, publishedTime, image } =
   Astro.props
 const blogTitle = siteConfig.blogTitle
 const author = siteConfig.author.name
@@ -28,6 +30,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
       type={type}
       publishedTime={publishedTime}
       author={type === "article" ? author : undefined}
+      image={image}
     />
     {
       type === "article" && publishedTime && (

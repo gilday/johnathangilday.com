@@ -20,6 +20,9 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props
 const { Content } = await render(post)
+// Absolute URL to the build-time generated Open Graph title card for this post
+// (see src/pages/blog/og/[...slug].png.ts). LinkedIn requires an absolute URL.
+const ogImage = new URL(`/blog/og/${getSlug(post.id)}.png`, Astro.site).href
 const formattedDate = post.data.date.toLocaleDateString("en-US", {
   timeZone: "UTC",
   year: "numeric",
@@ -33,6 +36,7 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
   description={post.data.description}
   type="article"
   publishedTime={post.data.date}
+  image={ogImage}
 >
   <article>
     <header>
