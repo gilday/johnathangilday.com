@@ -11,11 +11,11 @@
     "@astrojs/sitemap": "^3.7.2",
     "@fontsource/merriweather": "^5.0.0",
     "@resvg/resvg-js": "^2.6.2",
-    "astro": "^6.4.6",
+    "astro": "^7.3.2",
     "remark-github-blockquote-alert": "^2.1.0",
     "remark-smartypants": "^3.0.0",
     "satori": "^0.26.0",
-    "sharp": "^0.33.0"
+    "sharp": "^0.35.4"
   },
   "devDependencies": {
     "gh-pages": "6.3.0",
