@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config"
+import { unified } from "@astrojs/markdown-remark"
 import remarkSmartypants from "remark-smartypants"
 import { remarkAlert } from "remark-github-blockquote-alert"
 import sitemap from "@astrojs/sitemap"
@@ -9,7 +10,7 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   markdown: {
-    remarkPlugins: [remarkSmartypants, remarkAlert],
+    processor: unified({ remarkPlugins: [remarkSmartypants, remarkAlert] }),
     shikiConfig: {
       themes: {
         light: "solarized-light",
