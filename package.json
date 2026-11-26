@@ -8,12 +8,12 @@
     "url": "https://github.com/gilday/johnathangilday.com/issues"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.9",
-    "@astrojs/sitemap": "^3.7.5",
+    "@astrojs/markdown-remark": "^7.3.10",
+    "@astrojs/sitemap": "^3.7.6",
     "@fontsource/merriweather": "^5.0.0",
     "@resvg/resvg-js": "^2.6.2",
-    "astro": "^7.4.12",
-    "remark-github-blockquote-alert": "^2.1.0",
+    "astro": "^7.4.13",
+    "remark-github-blockquote-alert": "^2.1.1",
     "remark-smartypants": "^3.0.0",
     "satori": "^0.63.2",
     "sharp": "^0.35.5"
